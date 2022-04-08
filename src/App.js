@@ -21,15 +21,29 @@ const App = () => {
   }, []); 
 
   // Get Products On Select Category
-  const getCategoryProducts = (id, nameToSet) => {
+  const getCategoryProducts = (e) => {
+    const id = e.target.value
+    console.log(id)
     axios.get(`https://beyound.herokuapp.com/api/categories/${id}?populate=products`)
     .then(res => {
       const sentProds = res.data.data.attributes.products.data;
       console.log(sentProds)
       setProds(sentProds)
-      setCat(nameToSet)
+      for (let i = 0; i < categories.length; i++) {
+        const e = categories[i];
+        if (e.id == id) {
+          setCat(e.attributes.name)
+        }
+      }
       setProd(``)
     })
+  };
+  
+  // Set Product Name
+  const setProductName = (e) => {
+    const name = e.target.value
+    console.log(name)
+    setProd(`${name}`)
   };
   
   const save = () => {
@@ -46,49 +60,31 @@ const App = () => {
         </div>
       </nav>
 
-      <header className="App-header">
-      
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle mx-5 my-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          Categories
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        
-          {categories.map((cat)=>(
-            <li key={cat.id} onClick={() => getCategoryProducts(cat.id, cat.attributes.name)} >
-              <a class="dropdown-item" href="#">{cat.attributes.name}</a>
-            </li>
-          ))}
-        </ul>
-        <Header
-          title = {category}
-        />
-      </div>
-      
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle mx-5 my-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          Products
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        
-          {products.map((prod)=>(
-            <li key={prod.id} onClick={() => setProd(`${prod.attributes.name}`)}>
-              <a class="dropdown-item" href="#">{prod.attributes.name}</a>
-              </li>
-          ))}
-        </ul>
-        <Header
-          title = {product}
-        />
-      </div>
+      <div className="container">
+        <form>
+          <div class="form-group mx-5 my-5">
+            <label for="exampleFormControlSelect1">Categories</label>
+            <select onChange={(e) => getCategoryProducts(e)} class="form-control" id="exampleFormControlSelect1">
+              <option value="" disabled selected >Select category</option>
+            {categories.map((cat)=>(
+                <option key={cat.id} value={cat.id}>{cat.attributes.name}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div class="form-group mx-5 my-5">
+            <label for="exampleFormControlSelect1">Products</label>
+            <select onChange={(e) => setProductName(e)} class="form-control" id="exampleFormControlSelect1">
+              <option value="" disabled selected >Select product</option>
+            {products.map((prod)=>(
+                <option key={prod.id}>{prod.attributes.name}</option>
+              ))}
+            </select>
+          </div>
 
-        <Button
-        text = 'Save'
-        color = 'green'
-        textColor = 'white'
-        onClick ={save}
-        />
-      </header>
+          <button onClick={save} class="btn btn-primary">Submit</button>
+        </form>
+      </div>
     </div>
   );
 }
