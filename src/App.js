@@ -1,5 +1,6 @@
 import './index.css';
 import axios from 'axios';
+import Header from './components/Header';
 import { useState, useEffect } from 'react';
 
 const App = () => { 
@@ -8,6 +9,8 @@ const App = () => {
   const [products, setProds] = useState([])
   const [category, setCat] = useState("")
   const [product, setProd] = useState("")
+  const [show, setShow] = useState(false)
+  const [err, setErr] = useState(false)
   
   // Get All Categories
   useEffect( () => {
@@ -34,6 +37,8 @@ const App = () => {
         }
       }
       setProd(``)
+      setShow(false)
+      setErr(false)
     })
   };
   
@@ -42,13 +47,21 @@ const App = () => {
     const name = e.target.value
     console.log(name)
     setProd(`${name}`)
+    setShow(false)
+    setErr(false)
   };
   
   const save = () => {
     console.log("Saved")
     console.log(product, category)
+    if(product && category) {
+      setShow(true)
+      setErr(false)
+    }else{
+      setErr(true)
+    }
+    
   }
-  
   
   return (
     <div className="App">
@@ -59,29 +72,46 @@ const App = () => {
       </nav>
 
       <div className="container">
-        <form>
-          <div class="form-group mx-5 my-5">
-            <label for="exampleFormControlSelect1">Categories</label>
-            <select onChange={(e) => getCategoryProducts(e)} class="form-control" id="exampleFormControlSelect1">
-              <option value={""} disabled selected >Select category</option>
-            {categories.map((cat)=>(
-                <option key={cat.id} value={cat.id}>{cat.attributes.name}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div class="form-group mx-5 my-5">
-            <label for="exampleFormControlSelect1">Products</label>
-            <select onChange={(e) => setProductName(e)} class="form-control" id="exampleFormControlSelect1">
-              <option value={""} >Select product</option>
-            {products.map((prod)=>(
-                <option key={prod.id}>{prod.attributes.name}</option>
-              ))}
-            </select>
-          </div>
+      {!show &&
+        <div>
+          <form>
+            <div class="form-group mx-5 my-5">
+              <label for="exampleFormControlSelect1">Categories</label>
+              <select onChange={(e) => getCategoryProducts(e)} class="form-control" id="exampleFormControlSelect1">
+                <option value={""} disabled selected >Select category</option>
+              {categories.map((cat)=>(
+                  <option key={cat.id} value={cat.id}>{cat.attributes.name}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div class="form-group mx-5 my-5">
+              <label for="exampleFormControlSelect1">Products</label>
+              <select onChange={(e) => setProductName(e)} class="form-control" id="exampleFormControlSelect1">
+                <option value={""} >Select product</option>
+              {products.map((prod)=>(
+                  <option key={prod.id}>{prod.attributes.name}</option>
+                ))}
+              </select>
+            </div>
 
-        </form>
+          </form>
           <button onClick={save} class="btn btn-primary">Save</button>
+        </div>
+      }
+
+      {show &&
+      <Header
+        text= {`You have selected ${product} Product from ${category} Category`}
+      />
+      }
+
+      {err &&
+      <Header
+        text= {`You have to select both Category & Product first`}
+        color= 'red'
+      />
+      }
       </div>
     </div>
   );
