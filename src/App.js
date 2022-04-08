@@ -65,7 +65,7 @@ const App = () => {
           <div class="form-group mx-5 my-5">
             <label for="exampleFormControlSelect1">Categories</label>
             <select onChange={(e) => getCategoryProducts(e)} class="form-control" id="exampleFormControlSelect1">
-              <option value="" disabled selected >Select category</option>
+              <option value={""} disabled selected >Select category</option>
             {categories.map((cat)=>(
                 <option key={cat.id} value={cat.id}>{cat.attributes.name}</option>
               ))}
@@ -75,15 +75,15 @@ const App = () => {
           <div class="form-group mx-5 my-5">
             <label for="exampleFormControlSelect1">Products</label>
             <select onChange={(e) => setProductName(e)} class="form-control" id="exampleFormControlSelect1">
-              <option value="" disabled selected >Select product</option>
+              <option value={""} >Select product</option>
             {products.map((prod)=>(
                 <option key={prod.id}>{prod.attributes.name}</option>
               ))}
             </select>
           </div>
 
-          <button onClick={save} class="btn btn-primary">Submit</button>
         </form>
+          <button onClick={save} class="btn btn-primary">Save</button>
       </div>
     </div>
   );
