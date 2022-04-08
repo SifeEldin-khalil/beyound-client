@@ -2,9 +2,10 @@ const Button = ({text, textColor, color, onClick}) => {
   return (
     <button 
     style={{ 
-      padding: '1vw',
-      fontSize: '2.5vw',
-      borderRadius: '1vw',
+      margin: '15px',
+      padding: '5px 20px',
+      fontSize: '20px',
+      borderRadius: '10px',
       color: textColor,
       backgroundColor: color
     }}

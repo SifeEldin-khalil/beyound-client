@@ -1,18 +1,15 @@
 import './index.css';
 import Button from './components/Button';
+import Header from './components/Header';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-// import Box from '@mui/material/Box';
-// import InputLabel from '@mui/material/InputLabel';
-// import FormControl from '@mui/material/FormControl';
-// import NativeSelect from '@mui/material/NativeSelect';
-// import MenuItem from '@mui/material/MenuItem';
-// import Select from '@mui/material/Select'; 
 
 const App = () => { 
   // setVariables 
   const [categories, setCats] = useState([])
   const [products, setProds] = useState([])
+  const [category, setCat] = useState("")
+  const [product, setProd] = useState("")
   
   // Get All Categories
   useEffect( () => {
@@ -24,19 +21,22 @@ const App = () => {
   }, []); 
 
   // Get Products On Select Category
-  const getCategoryProducts = (id) => {
+  const getCategoryProducts = (id, nameToSet) => {
     axios.get(`https://beyound.herokuapp.com/api/categories/${id}?populate=products`)
     .then(res => {
       const sentProds = res.data.data.attributes.products.data;
       console.log(sentProds)
       setProds(sentProds)
+      setCat(nameToSet)
+      setProd(``)
     })
   };
   
   const save = () => {
     console.log("Saved")
+    console.log(product, category)
   }
-
+  
   
   return (
     <div className="App">
@@ -49,29 +49,37 @@ const App = () => {
       <header className="App-header">
       
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle mx-5 my-5" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle mx-5 my-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           Categories
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         
           {categories.map((cat)=>(
-            <li key={cat.id} onClick={() => getCategoryProducts(cat.id)} >
+            <li key={cat.id} onClick={() => getCategoryProducts(cat.id, cat.attributes.name)} >
               <a class="dropdown-item" href="#">{cat.attributes.name}</a>
             </li>
           ))}
         </ul>
+        <Header
+          title = {category}
+        />
       </div>
       
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle mx-5 my-5" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle mx-5 my-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           Products
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         
           {products.map((prod)=>(
-            <li key={prod.id}><a class="dropdown-item" href="#">{prod.attributes.name}</a></li>
+            <li key={prod.id} onClick={() => setProd(`${prod.attributes.name}`)}>
+              <a class="dropdown-item" href="#">{prod.attributes.name}</a>
+              </li>
           ))}
         </ul>
+        <Header
+          title = {product}
+        />
       </div>
 
         <Button
