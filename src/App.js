@@ -1,6 +1,7 @@
 import './index.css';
 import axios from 'axios';
 import Header from './components/Header';
+import { Button } from 'bootstrap';
 import { useState, useEffect } from 'react';
 
 const App = () => { 
@@ -60,7 +61,11 @@ const App = () => {
     }else{
       setErr(true)
     }
-    
+  }  
+
+  const back = () => {
+    console.log("Back")
+    window.location.reload(false);
   }
   
   return (
@@ -101,9 +106,12 @@ const App = () => {
       }
 
       {show &&
-      <Header
-        text= {`You have selected ${product} Product from ${category} Category`}
-      />
+      <div>
+        <Header
+          text= {`You have selected ${product} Product from ${category} Category`}
+        />
+        <button onClick={back} class="btn btn-success">Back</button>
+      </div>
       }
 
       {err &&
