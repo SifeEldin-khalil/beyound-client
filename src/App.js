@@ -1,7 +1,6 @@
 import './index.css';
 import axios from 'axios';
 import Header from './components/Header';
-import { Button } from 'bootstrap';
 import { useState, useEffect } from 'react';
 
 const App = () => { 
@@ -72,7 +71,7 @@ const App = () => {
     <div className="App">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Beyound</a>
+          <a class="navbar-brand" href="/">Beyound</a>
         </div>
       </nav>
 
